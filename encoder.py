@@ -12,16 +12,39 @@ class zip_zip:
 
 
     def zipper(self, ids):
-        file_zipped = ""
+        file_zipped = [] 
+        total_zip_bar = "" 
+        progress = 0    
+        zip_bar = "===="
+        total_zip = len(ids)
 
-        for id in ids:
+        checks = [0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0]
+        check_points = [round(total_zip * p) for p in checks]
+
+
+        for pos, id in enumerate(ids, start=1):
             id = id
             zip = 0
-            zipped = ""
-            while zip != id:
-                file_zipped += "zip"
-                zip += 1
-            file_zipped += "zip|"
+            line_zips = 0
 
-        return file_zipped
+            if pos in check_points:
+                total_zip_bar += zip_bar
+                progress += 12.5
+                print(f"{progress}% {total_zip_bar}" )
+                if pos == total_zip:
+                    print("ZIP ZIP COMPLETE :D")
+
+            while zip != id:
+                file_zipped.append("zip")
+
+                if line_zips == 67:
+                    file_zipped.append("\n")
+                    line_zips = 0
+                zip += 1
+                line_zips += 1
+
+            file_zipped.append("zip|")
+            line_zips += 1
+
+        return "".join(file_zipped)
 
