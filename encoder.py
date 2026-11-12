@@ -3,7 +3,7 @@ import random
 
 class zip_zip:
     def __init__(self, data: bytes):
-        unique_bytes = sorted(set(data))
+        unique_bytes = range(256)
         self.file_to_zip = {byte_val: idx for idx, byte_val in enumerate(unique_bytes)}
         
 
@@ -29,7 +29,7 @@ class zip_zip:
             zip = 0
 
             if pos in check_points:
-                total_zip_bar += zip_bar
+                total_zip_bar += zip_bar 
                 progress += 12.5
                 print(f"{progress}% {total_zip_bar}" )
                 if pos == total_zip:
