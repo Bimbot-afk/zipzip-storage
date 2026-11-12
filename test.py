@@ -1,12 +1,10 @@
 from encoder import zip_zip as zz
+from decoder import unzip_zip as uz
+
 import os
-import pyttsx3
 
 file = os.path.join("sample/pdf.pdf")
 
-motor = pyttsx3.init()
-motor.say("ziiip zip zip")
-motor.runAndWait()
 
 with open("sample/pdf.pdf", "rb") as file:
     data = file.read()
@@ -20,3 +18,12 @@ zipped_file = zz.zipper(ids)
 
 with open("sample/pdf.zipzip", "wb") as file:
     data_to_zip = file.write(zipped_file.encode("utf-8"))
+
+with open("sample/pdf.zipzip", "r") as file:
+    zipped_file = file.read()
+
+dec = uz(zz.file_to_zip)
+recover_bytes = dec.un_zipzip(zipped_file)
+
+with open("sample/pdf_unziped.pdf", "wb") as file:
+    file.write(recover_bytes)
