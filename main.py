@@ -41,6 +41,7 @@ def main():
 
     options = {"1", "2", "3"}
     option = input("pick the number >>> ").strip()
+    error = None
 
     if option in options:
         if option == "1":
@@ -53,7 +54,29 @@ def main():
         elif option == "2":
             unzip_file_path = input("Enter the absolute path to the route >>> ").strip("\"' ")
             if Path(unzip_file_path).is_absolute():
-                uz(unzip_file_path)
+                error = None
+            else:
+                error = True
+
+            if error is None:
+                print("""
+                Enter the type of fyle the recovery be:
+                --------------------------------------------
+                1. pdf
+                2. jpg
+                3. png
+                4. docx
+                5. xlsx
+                6. mp4
+                7. mp3
+                8. zip (funny eh?)
+                9. txt
+                10. pptx
+                """)
+
+                file_type = input(">>> ").strip()
+                key = input("Enter the decryption key >>> ").strip()
+                un_zip(unzip_file_path, file_type, key)
             else:
                 print("Make sure you enter an absolute path")
 
@@ -81,6 +104,38 @@ def zip_file(path):
             file.write(zipped_file)
 
     print(f"File successfully compressed to: {new_zip_path}")
+    print(f"🔑 Decryption key (save this to unzip!): {encoder_instance.key}")
+
+
+def un_zip(path, type, key):
+    ext_map = {
+        "1": ".pdf",
+        "2": ".jpg",
+        "3": ".png",
+        "4": ".docx",
+        "5": ".xlsx",
+        "6": ".mp4",
+        "7": ".mp3",
+        "8": ".zip",
+        "9": ".txt",
+        "10": ".pptx",
+    }
+    ext = ext_map.get(type, type if type.startswith(".") else f".{type}")
+
+    zipped_path = Path(path)
+
+    with open(zipped_path, "r", encoding="utf-8") as unzip:
+        zipped_content = unzip.read()
+
+    dec = uz(key)
+    recover_bytes = dec.un_zipzip(zipped_content)
+
+    recovered_path = zipped_path.with_suffix(ext)
+
+    with open(recovered_path, "wb") as file:
+        file.write(recover_bytes)
+
+    print(f"File successfully recovered to: {recovered_path}")
 
 
 if __name__ == "__main__":

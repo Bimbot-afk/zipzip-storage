@@ -1,9 +1,12 @@
 import re
 import random
+import secrets
 
 class zip_zip:
-    def __init__(self, data: bytes):
-        unique_bytes = range(256)
+    def __init__(self, data: bytes, key: str = None):
+        self.key = key if key is not None else secrets.token_hex(3).upper()
+        unique_bytes = list(range(256))
+        random.Random(self.key).shuffle(unique_bytes)
         self.file_to_zip = {byte_val: idx for idx, byte_val in enumerate(unique_bytes)}
         
 
@@ -51,4 +54,7 @@ class zip_zip:
             line_zips += 1
 
         return "".join(file_zipped)
+
+    def return_file_to_zip(self):
+        return self.file_to_zip
 
