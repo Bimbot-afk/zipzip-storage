@@ -57,4 +57,3 @@ class zip_zip:
 
     def return_file_to_zip(self):
         return self.file_to_zip
-

@@ -106,6 +106,11 @@ def zip_file(path):
     print(f"File successfully compressed to: {new_zip_path}")
     print(f"🔑 Decryption key (save this to unzip!): {encoder_instance.key}")
 
+    try:
+        os.remove(path_zip)
+    except FileNotFoundError:
+        print("File already deleted")
+
 
 def un_zip(path, type, key):
     ext_map = {
@@ -136,6 +141,11 @@ def un_zip(path, type, key):
         file.write(recover_bytes)
 
     print(f"File successfully recovered to: {recovered_path}")
+
+    try:
+        os.remove(zipped_path)
+    except FileNotFoundError:
+        print("File already deleted")
 
 
 if __name__ == "__main__":
