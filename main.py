@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from decoder import unzip_zip as uz
 from encoder import zip_zip as zz
-
+from zip_listen import zip_listen as zl
 
 def main():
     print("""
@@ -95,7 +95,11 @@ def zip_file(path):
     ids = encoder_instance.zip_ids(data)
     zipped_file = encoder_instance.zipper(ids)
 
+    file_name = path_zip.name
+
     new_zip_path = path_zip.with_suffix(".zipzip")
+
+    zl(zipped_file, file_name)
 
     with open(new_zip_path, "wb") as file:
         if isinstance(zipped_file, str):
