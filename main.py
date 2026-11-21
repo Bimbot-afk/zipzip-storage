@@ -59,24 +59,8 @@ def main():
                 error = True
 
             if error is None:
-                print("""
-                Enter the type of fyle the recovery be:
-                --------------------------------------------
-                1. pdf
-                2. jpg
-                3. png
-                4. docx
-                5. xlsx
-                6. mp4
-                7. mp3
-                8. zip (funny eh?)
-                9. txt
-                10. pptx
-                """)
-
-                file_type = input(">>> ").strip()
                 key = input("Enter the decryption key >>> ").strip()
-                un_zip(unzip_file_path, file_type, key)
+                un_zip(unzip_file_path, key)
             else:
                 print("Make sure you enter an absolute path")
 
@@ -93,7 +77,9 @@ def zip_file(path):
 
     encoder_instance = zz(data)
     ids = encoder_instance.zip_ids(data)
-    zipped_file = encoder_instance.zipper(ids)
+    file_type = path_zip.suffix
+    file_type = file_type.lower()
+    zipped_file = encoder_instance.zipper(ids, file_type)
 
     file_name = path_zip.name
 
@@ -116,20 +102,7 @@ def zip_file(path):
         print("File already deleted")
 
 
-def un_zip(path, type, key):
-    ext_map = {
-        "1": ".pdf",
-        "2": ".jpg",
-        "3": ".png",
-        "4": ".docx",
-        "5": ".xlsx",
-        "6": ".mp4",
-        "7": ".mp3",
-        "8": ".zip",
-        "9": ".txt",
-        "10": ".pptx",
-    }
-    ext = ext_map.get(type, type if type.startswith(".") else f".{type}")
+def un_zip(path, key):
 
     zipped_path = Path(path)
 
@@ -137,7 +110,7 @@ def un_zip(path, type, key):
         zipped_content = unzip.read()
 
     dec = uz(key)
-    recover_bytes = dec.un_zipzip(zipped_content)
+    recover_bytes, ext = dec.un_zipzip(zipped_content)
 
     recovered_path = zipped_path.with_suffix(ext)
 

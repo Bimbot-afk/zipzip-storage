@@ -13,10 +13,34 @@ class zip_zip:
     def zip_ids(self, data:bytes):
         return [self.file_to_zip[b] for b in data]
 
+    def zip_file_type(self, file_type):
+        #only combinations of z-i-p-a max 5 letters
+            zip_file_type_d = {
+            ".txt": "zpziz",
+            ".pdf": "zppaz",
+            ".docx": "zizzp",
+            ".xlsx": "zzzpp",
+            ".pptx": "zzpaz",
+            ".jpg": "zapiz",
+            ".png": "zaizz",
+            ".mp3": "zapap",
+            ".mp4": "zpaip",
+            ".zip": "zaipa",
+            ".html": "zpzzi",
+            ".css": "zzzzi",
+            ".js": "zpiiz",
+            ".py": "ziapp",
+            ".json": "zzpzi"
+            }
 
+            if file_type not in zip_file_type_d:
+                return "zpziz"
+            else:
+                return zip_file_type_d[file_type]
 
-    def zipper(self, ids):
-        file_zipped = [] 
+    def zipper(self, ids, file_type: str):
+        zip_file_type = self.zip_file_type(file_type)
+        file_zipped = [f"{zip_file_type}|"] 
         total_zip_bar = "" 
         progress = 0    
         zip_bar = "===="
