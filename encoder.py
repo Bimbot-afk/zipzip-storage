@@ -8,6 +8,8 @@ class zip_zip:
         unique_bytes = list(range(256))
         random.Random(self.key).shuffle(unique_bytes)
         self.file_to_zip = {byte_val: idx for idx, byte_val in enumerate(unique_bytes)}
+        self.total_zip = 0
+        self.total_zap = 0
         
 
     def zip_ids(self, data:bytes):
@@ -65,8 +67,10 @@ class zip_zip:
             while zip != id:
                 if random.randint(1, 5)  != random.randint(1, 5):
                     file_zipped.append("zip")
+                    self.total_zip += 1
                 else:
                     file_zipped.append("zap")
+                    self.total_zap += 1
 
                 if line_zips == 67:
                     file_zipped.append("\n")
@@ -75,9 +79,13 @@ class zip_zip:
                 line_zips += 1
 
             file_zipped.append("zip|")
+            self.total_zip += 1
             line_zips += 1
 
         return "".join(file_zipped)
 
     def return_file_to_zip(self):
         return self.file_to_zip
+
+    def total_zipzap(self):
+        return self.total_zip, self.total_zap

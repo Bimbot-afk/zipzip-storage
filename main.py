@@ -93,8 +93,13 @@ def zip_file(path):
         else:
             file.write(zipped_file)
 
+    total_zip, total_zap = encoder_instance.total_zipzap()
+
     print(f"File successfully compressed to: {new_zip_path}")
     print(f"🔑 Decryption key (save this to unzip!): {encoder_instance.key}")
+    print(f"Total zip: {total_zip}")
+    print(f"Total zap: {total_zap}")
+    print(f"Total characters: {len(zipped_file)}")
 
     try:
         os.remove(path_zip)

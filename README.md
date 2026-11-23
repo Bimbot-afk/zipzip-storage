@@ -9,7 +9,7 @@
 ![Lossless](https://img.shields.io/badge/100%25-Lossless-00C853?style=for-the-badge)
 ![Vibes](https://img.shields.io/badge/Zips%20por%20l%C3%ADnea-67-9C27B0?style=for-the-badge)
 
-*Un codificador y decodificador binario reversible que convierte cualquier archivo (PDFs, imágenes, texto o ejecutables) en un mar infinito de `zip` y `zap`.*
+_Un codificador y decodificador binario reversible que convierte cualquier archivo (PDFs, imágenes, texto o ejecutables) en un mar infinito de `zip` y `zap`._
 
 </div>
 
@@ -17,7 +17,7 @@
 
 ## ¿Qué es `zipzip`?
 
-**`zipzip`** es un sistema de codificación binaria sin pérdida (*lossless*) escrito en Python. En lugar de reducir el tamaño de tus archivos como un `.zip` tradicional, **`zipzip` toma el camino opuesto**: lee los bytes crudos (`0`–`255`) de cualquier archivo y traduce cada byte en secuencias de las palabras `"zip"` y `"zap"` separadas por `"|"`.
+**`zipzip`** es un sistema de codificación binaria sin pérdida (_lossless_) escrito en Python. En lugar de reducir el tamaño de tus archivos como un `.zip` tradicional, **`zipzip` toma el camino opuesto**: lee los bytes crudos (`0`–`255`) de cualquier archivo y traduce cada byte en secuencias de las palabras `"zip"` y `"zap"` separadas por `"|"`.
 
 Al desencriptar el archivo `.zipzip`, el archivo original se reconstruye **byte por byte de forma exacta**.
 
@@ -38,7 +38,7 @@ flowchart LR
 2. **Codificación (`zipper`):**
    - Cada byte con valor `N` se convierte en `N` repeticiones aleatorias de `"zip"` (80% de probabilidad) o `"zap"` (20% de probabilidad), cerrando siempre con un `"zip|"`.
    - Cada **67 bloques** se inserta automáticamente un salto de línea (`\n`) para mantener el archivo `.zipzip` visualmente alineado.
-   - Incluye una barra de progreso en consola con 8 *checkpoints* (`12.5%` → `100%`).
+   - Incluye una barra de progreso en consola con 8 _checkpoints_ (`12.5%` → `100%`).
 3. **Decodificación (`un_zipzip`):**
    - Como tanto `"zip"` como `"zap"` miden exactamente **3 caracteres**, el azar no afecta la reconstrucción.
    - Se eliminan los saltos de línea, se divide por `"|"` y se recupera el byte original mediante la fórmula:
@@ -46,12 +46,12 @@ flowchart LR
 
 ### Ejemplo visual de codificación
 
-| Byte Original | Valor Decimal | Representación en `.zipzip` | Largo del bloque |
-| :---: | :---: | :--- | :---: |
-| `\x00` | `0` | `zip\|` | `3` |
-| `\x01` | `1` | `zipzip\|` *(o `zapzip\|`)* | `6` |
-| `\x03` | `3` | `zipzapzipzip\|` | `12` |
-| `'A'` | `65` | `zipzipzap...zip\|` *(66 veces en total)* | `198` |
+| Byte Original | Valor Decimal | Representación en `.zipzip`               | Largo del bloque |
+| :-----------: | :-----------: | :---------------------------------------- | :--------------: |
+|    `\x00`     |      `0`      | `zip\|`                                   |       `3`        |
+|    `\x01`     |      `1`      | `zipzip\|` _(o `zapzip\|`)_               |       `6`        |
+|    `\x03`     |      `3`      | `zipzapzipzip\|`                          |       `12`       |
+|     `'A'`     |     `65`      | `zipzipzap...zip\|` _(66 veces en total)_ |      `198`       |
 
 ---
 
@@ -94,41 +94,8 @@ Verás la barra de progreso en tiempo real:
 ZIP ZIP COMPLETE :D
 ```
 
-### 2. Codificar y decodificar cualquier archivo en tu código
-
-```python
-from encoder import zip_zip as zz
-from decoder import unzip_zip as uz
-
-# 1. Leer cualquier archivo en binario
-with open("sample/pdf.pdf", "rb") as f:
-    data = f.read()
-
-# 2. Encriptar a .zipzip
-encoder = zz(data)
-ids = encoder.zip_ids(data)
-zipped_text = encoder.zipper(ids)
-
-with open("sample/pdf.zipzip", "wb") as f:
-    f.write(zipped_text.encode("utf-8"))
-
-# 3. Desencriptar de vuelta al archivo original
-with open("sample/pdf.zipzip", "r", encoding="utf-8") as f:
-    zipped_content = f.read()
-
-decoder = uz(encoder.file_to_zip)
-recovered_bytes = decoder.un_zipzip(zipped_content)
-
-with open("sample/pdf_unziped.pdf", "wb") as f:
-    f.write(recovered_bytes)
-
-assert data == recovered_bytes  # ¡100% idéntico byte por byte!
-```
-
----
-
 <div align="center">
   <sub>Hecho con mucho <code>zip</code> y un poco de <code>zap</code> </sub>
 </div>
 
-test
+- pdf.zipzip = encriptation key // 01E991
