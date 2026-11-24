@@ -6,70 +6,37 @@ from .encoder import zip_zip as zz
 from .zip_listen import zip_listen as zl
 
 def main():
-    print("""
+    while True:
+        print("Welcome to zip zip")
+        print("zipzap to exit")
 
-               .dMMMMMMMMMMMMMMMMMMMMMMb.
-            .dMMMMMMMMMMMMMMMMMMMMMMMMMMMMb.
-          .MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM.
-         dMMMMMMMP'        ``YMMMMMMM       `YMMb
-        dMMMMMMM'             `MMMMMM'         `MMb
-       dMMMMMMM'               `MMMM'           `MMb
-       MMMMMMMM                 MMMM             MMM
-       MMMMMMMM                 MMMM             MMM
-       MMMMMMMMb               dMMMM            dMM'
-       YMMMMMMMMb             dMMMMMb          dMM'
-        YMMMMMMMMMb.       .dMMMMMMMMMb.      dMMP
-         `YMMMMMMMMMMMbbMMMMMMMMMMMMMMMMMbb.dMMP'
-           `YMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMP'
-             `YMMMMMMMMMMMMMMMMMMMMMMMMMMMMP'
-                `TMMMMMMMMMMMMMMMMMMMMMMMP'
-                   `TMMMMMMMMMMMMMMMMP'
+        error = None
 
-                        |MMMMMMM|
-                        |MMMMMMM|
-                        |MMMMMMM|
-                       dMMMMMMMMMb
-                     .MMMMMMMMMMMMM.
-                   .MMMMMMMMMMMMMMMMM.
-    """)
-    print("Welcome to zip zip")
-    print("---------------------------------")
-    print("""
-    1. zip zip a file
-    2. Un zip zip a file
-    3. Exit
-    """)
-
-    options = {"1", "2", "3"}
-    option = input("pick the number >>> ").strip()
-    error = None
-
-    if option in options:
-        if option == "1":
-            zip_file_path = input("Enter the absolute path to the route >>> ").strip("\"' ")
-            if Path(zip_file_path).is_absolute():
-                zip_file(zip_file_path)
-            else:
-                print("Make sure you enter an absolute path")
-
-        elif option == "2":
-            unzip_file_path = input("Enter the absolute path to the route >>> ").strip("\"' ")
-            if Path(unzip_file_path).is_absolute():
-                error = None
-            else:
-                error = True
-
-            if error is None:
-                key = input("Enter the decryption key >>> ").strip()
-                un_zip(unzip_file_path, key)
-            else:
-                print("Make sure you enter an absolute path")
-
-        elif option == "3":
-            exit()
+def zip_file_call():
+    print("You will zip zip a file")
+    zip_file_path = input("Enter the absolute path to the route >>> ").strip("\"' ")
+    if Path(zip_file_path).is_absolute():
+        zip_file(zip_file_path)
     else:
-        print("Invalid option. Please pick 1, 2, or 3.")
+        print("Make sure you enter an absolute path")
 
+def unzip_file_call():
+    print("You will unzip a zipzip file")
+    unzip_file_path = input("Enter the absolute path to the route >>> ").strip("\"' ")
+    if Path(unzip_file_path).is_absolute():
+        error = None
+    else:
+        error = True
+
+    if error is None:
+        key = input("Enter the decryption key >>> ").strip()
+        un_zip(unzip_file_path, key)
+    else:
+        print("Make sure you enter an absolute path")
+
+def exit_call():
+    print("zipzap :c")
+    exit()
 
 def zip_file(path):
     path_zip = Path(path)
@@ -129,6 +96,33 @@ def un_zip(path, key):
         os.remove(zipped_path)
     except FileNotFoundError:
         print("File already deleted")
+
+def print_zipzipzip():
+    print("""
+
+               .dMMMMMMMMMMMMMMMMMMMMMMb.
+            .dMMMMMMMMMMMMMMMMMMMMMMMMMMMMb.
+          .MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM.
+         dMMMMMMMP'        ``YMMMMMMM       `YMMb
+        dMMMMMMM'             `MMMMMM'         `MMb
+       dMMMMMMM'               `MMMM'           `MMb
+       MMMMMMMM                 MMMM             MMM
+       MMMMMMMM                 MMMM             MMM
+       MMMMMMMMb               dMMMM            dMM'
+       YMMMMMMMMb             dMMMMMb          dMM'
+        YMMMMMMMMMb.       .dMMMMMMMMMb.      dMMP
+         `YMMMMMMMMMMMbbMMMMMMMMMMMMMMMMMbb.dMMP'
+           `YMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMP'
+             `YMMMMMMMMMMMMMMMMMMMMMMMMMMMMP'
+                `TMMMMMMMMMMMMMMMMMMMMMMMP'
+                   `TMMMMMMMMMMMMMMMMP'
+                        |MMMMMMM|
+                        |MMMMMMM|
+                        |MMMMMMM|
+                       dMMMMMMMMMb
+                     .MMMMMMMMMMMMM.
+                   .MMMMMMMMMMMMMMMMM.
+    """)
 
 
 if __name__ == "__main__":
