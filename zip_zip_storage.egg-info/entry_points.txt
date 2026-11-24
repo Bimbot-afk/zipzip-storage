@@ -1,0 +1,2 @@
+[console_scripts]
+zipzip = zipzip_storage.main:main

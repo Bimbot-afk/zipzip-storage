@@ -1,8 +1,9 @@
 import os
+import sys
 from pathlib import Path
-from decoder import unzip_zip as uz
-from encoder import zip_zip as zz
-from zip_listen import zip_listen as zl
+from .decoder import unzip_zip as uz
+from .encoder import zip_zip as zz
+from .zip_listen import zip_listen as zl
 
 def main():
     print("""

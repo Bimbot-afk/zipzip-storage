@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zip-zip-storage"
+version = "1.0.0"
+description = "An actual and real zip zip storage system"
+requires-python = ">=3.8"
+dependencies = [
+    "pyttsx3"
+]
+
+[project.scripts]
+zipzip = "zipzip_storage.main:main"
+
+[tool.setuptools.packages.find]
+include = ["zipzip_storage*"]
