@@ -32,33 +32,70 @@ def print_zipzipzip():
                      .MMMMMMMMMMMMM.
                    .MMMMMMMMMMMMMMMMM.
     """)
+    print(f"Current Folder: {Path.cwd()}")
 
 class zipzip(cmd.Cmd):
     prompt = ">>> "
     intro = "Welcome to zip zip. Type help or ? to list commands."
+    current_files = {}
+    selected_file = None
     print_zipzipzip()
 
-    def do_zipfile(self, arg):
+    def do_zip(self, arg):
         print("You will zip zip a file")
-        zip_file_path = input("Enter the absolute path to the route >>> ").strip("\"' ")
-        if Path(zip_file_path).is_absolute():
+        zip_file_path = self.selected_file
+        if self.selected_file == None:
+            print("Make sure to select a file")
+        else:
+            print_zipzipzip()
             zip_file(zip_file_path, arg)
-        else:
-            print("Make sure you enter an absolute path")
+        self.selected_file = None
 
-    def do_unzipfile(self, arg):
+
+    def do_unzip(self, arg):
         print("You will unzip a zipzip file")
-        unzip_file_path = input("Enter the absolute path to the route >>> ").strip("\"' ")
-        if Path(unzip_file_path).is_absolute():
-            error = None
-        else:
-            error = True
-
-        if error is None:
+        if self.selected_file is not None and self.selected_file.suffix == ".zipzip":
+            unzip_file_path = self.selected_file
             key = input("Enter the decryption key >>> ").strip()
+            print_zipzipzip()
             un_zip(unzip_file_path, key)
         else:
-            print("Make sure you enter an absolute path")
+            print("Make sure to select a zipzip file")
+        self.selected_file = None
+
+    def do_ls(self, arg):
+        i = 0
+        files = {}
+        for item in os.listdir("."):
+            i+=1
+            files[str(i)] = Path(item).absolute()
+            print(f"{i}_{item}")
+        
+        self.current_files = files
+
+    def do_zap(self, arg):
+        files = self.current_files
+        file_number = arg.strip()
+        self.selected_file = files[file_number]
+        print(f"File {self.selected_file} selected")
+
+    def do_chezip(self, arg):
+        if self.selected_file == None:
+            print("No file selected")
+        else:
+            print(f"Selected file: {self.selected_file}")
+
+    def do_cleanzip(self, arg):
+        self.selected_file = None
+        print("File selection cleared")
+
+    def do_cd(self, folder):
+        try: 
+            os.chdir(folder)
+            print(f"Current Folder: {Path.cwd()}")
+        except FileNotFoundError:
+            print("Folder not found")
+
 
     def do_exitzip(self, arg):
         print("zipzap :c")
