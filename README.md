@@ -8,7 +8,7 @@
 ![Format](https://img.shields.io/badge/Format-.zipzip-FFCC00?style=for-the-badge)
 ![Lossless](https://img.shields.io/badge/100%25-Lossless-00C853?style=for-the-badge)
 ![CLI](https://img.shields.io/badge/Interactive-CLI-FF6F00?style=for-the-badge)
-![Vibes](https://img.shields.io/badge/Zips%20per%20line-67-9C27B0?style=for-the-badge)
+![Zips?](https://img.shields.io/badge/Zips%20per%20line-67-9C27B0?style=for-the-badge)
 
 _A lossless, key-encrypted binary encoder, decoder, and interactive CLI that turns any file (PDFs, images, text, audio, or binaries) into an endless sea of `zip` and `zap` — and even lets you listen to it._
 
@@ -61,12 +61,12 @@ flowchart LR
 
 ### Visual Encoding Example
 
-| Mapped ID | Representation in `.zipzip`              | Block Length |
-| :-------: | :--------------------------------------- | :----------: |
-|    `0`    | `zip\|`                                  |     `3`      |
-|    `1`    | `zipzip\|` _(or `zapzip\|`)_             |     `6`      |
-|    `3`    | `zipzapzipzip\|`                         |     `12`     |
-|   `65`    | `zipzipzap...zip\|` _(66 tokens total)_  |    `198`     |
+| Mapped ID | Representation in `.zipzip`             | Block Length |
+| :-------: | :-------------------------------------- | :----------: |
+|    `0`    | `zip\|`                                 |     `3`      |
+|    `1`    | `zipzip\|` _(or `zapzip\|`)_            |     `6`      |
+|    `3`    | `zipzapzipzip\|`                        |     `12`     |
+|   `65`    | `zipzipzap...zip\|` _(66 tokens total)_ |    `198`     |
 
 ### Supported File-Type Headers
 
@@ -79,7 +79,7 @@ flowchart LR
 Requires **Python 3.8+**. Clone the repository and install the package (using a virtual environment is recommended):
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Bimbot-afk/zipzip-storage.git
 cd zip_zip
 python -m venv venv
 source venv/bin/activate   # On Windows: venv\Scripts\activate
