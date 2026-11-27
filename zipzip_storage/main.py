@@ -42,6 +42,7 @@ class zipzip(cmd.Cmd):
     print_zipzipzip()
 
     def do_zip(self, arg):
+        """zZips the selected file"""
         print("You will zip zip a file")
         zip_file_path = self.selected_file
         if self.selected_file == None:
@@ -53,6 +54,7 @@ class zipzip(cmd.Cmd):
 
 
     def do_unzip(self, arg):
+        """Unzips the selected file"""
         print("You will unzip a zipzip file")
         if self.selected_file is not None and self.selected_file.suffix == ".zipzip":
             unzip_file_path = self.selected_file
@@ -64,6 +66,7 @@ class zipzip(cmd.Cmd):
         self.selected_file = None
 
     def do_ls(self, arg):
+        """List the files of the current directory"""
         i = 0
         files = {}
         for item in os.listdir("."):
@@ -74,22 +77,26 @@ class zipzip(cmd.Cmd):
         self.current_files = files
 
     def do_zap(self, arg):
+        """Selects a file to zip or unzip"""
         files = self.current_files
         file_number = arg.strip()
         self.selected_file = files[file_number]
         print(f"File {self.selected_file} selected")
 
     def do_chezip(self, arg):
+        """Shows whats the current selected file"""
         if self.selected_file == None:
             print("No file selected")
         else:
             print(f"Selected file: {self.selected_file}")
 
     def do_cleanzip(self, arg):
+        """Clean the current selected file"""
         self.selected_file = None
         print("File selection cleared")
 
     def do_cd(self, folder):
+        """Change directory"""
         try: 
             os.chdir(folder)
             print(f"Current Folder: {Path.cwd()}")
@@ -98,6 +105,7 @@ class zipzip(cmd.Cmd):
 
 
     def do_exitzip(self, arg):
+        """Exits zipzap"""
         print("zipzap :c")
         exit()
 

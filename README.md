@@ -2,87 +2,130 @@
 
 # ZIPZIP (`zip_zip`)
 
-**¿Por qué comprimir archivos cuando puedes transformarlos en millones de `"zip"` y `"zap"`?**
+**Why shrink files when you can transform them into millions of `"zip"` and `"zap"`?**
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Format](https://img.shields.io/badge/Formato-.zipzip-FFCC00?style=for-the-badge)
+![Format](https://img.shields.io/badge/Format-.zipzip-FFCC00?style=for-the-badge)
 ![Lossless](https://img.shields.io/badge/100%25-Lossless-00C853?style=for-the-badge)
-![Vibes](https://img.shields.io/badge/Zips%20por%20l%C3%ADnea-67-9C27B0?style=for-the-badge)
+![CLI](https://img.shields.io/badge/Interactive-CLI-FF6F00?style=for-the-badge)
+![Vibes](https://img.shields.io/badge/Zips%20per%20line-67-9C27B0?style=for-the-badge)
 
-_Un codificador y decodificador binario reversible que convierte cualquier archivo (PDFs, imágenes, texto o ejecutables) en un mar infinito de `zip` y `zap`._
+_A lossless, key-encrypted binary encoder, decoder, and interactive CLI that turns any file (PDFs, images, text, audio, or binaries) into an endless sea of `zip` and `zap` — and even lets you listen to it._
 
 </div>
 
 ---
 
-## ¿Qué es `zipzip`?
+## What is `zipzip`?
 
-**`zipzip`** es un sistema de codificación binaria sin pérdida (_lossless_) escrito en Python. En lugar de reducir el tamaño de tus archivos como un `.zip` tradicional, **`zipzip` toma el camino opuesto**: lee los bytes crudos (`0`–`255`) de cualquier archivo y traduce cada byte en secuencias de las palabras `"zip"` y `"zap"` separadas por `"|"`.
+**`zipzip`** is a reversible, lossless binary encoding system written in Python. Instead of making your files smaller like a traditional `.zip` archive, **`zipzip` goes in the exact opposite direction**: it shuffles the byte space using a generated decryption key, tags the file with a 5-letter file-type signature, and turns every raw byte (`0`–`255`) into sequences of `"zip"` and `"zap"` delimited by `"|"`.
 
-Al desencriptar el archivo `.zipzip`, el archivo original se reconstruye **byte por byte de forma exacta**.
+When decoded with the matching key, the original file is reconstructed **byte-for-byte with its original extension automatically restored**.
 
 ---
 
-## ¿Cómo funciona?
+## Features
+
+- **100% Lossless Reconstruction:** Every byte is recovered identically.
+- **Key-Based Byte Shuffling:** Each encoding generates a unique 6-character hex decryption key (`secrets.token_hex(3)`) used to shuffle the `0..255` byte mapping.
+- **Automatic File-Type Detection:** Embeds a 5-character `z/i/p/a` header so `unzip` automatically knows which extension to restore.
+- **Interactive CLI (`zipzip`):** Built with Python's `cmd.Cmd`, featuring directory navigation (`cd`, `ls`), file selection (`zap`, `chezip`, `cleanzip`), encoding (`zip`), and decoding (`unzip`).
+- **Audio Preview (`zip -l`):** Uses `pyttsx3` to synthesize a spoken `.aiff` sample of random `"zip"`/`"zap"` blocks from your encoded file.
+- **Live Progress & Stats:** Displays an 8-checkpoint progress bar (`12.5%` → `100%`) along with total `zip`, `zap`, and character counts.
+
+---
+
+## How It Works
 
 ```mermaid
 flowchart LR
-    A[" Archivo Original\n(bytes 0..255)"] --> B[" zip_ids()\nMapeo byte → ID"]
-    B --> C[" zipper()\n(ID + 1) bloques de 'zip'/'zap' + '|'"]
-    C --> D[" Archivo .zipzip\n(67 zips por línea)"]
-    D --> E[" un_zipzip()\n(len(bloque) // 3) - 1"]
-    E --> F[" Archivo Recuperado\n(100% idéntico)"]
+    A["Original File\n(bytes 0..255)"] --> B["zip_ids()\nKey-shuffled byte → ID"]
+    B --> C["zipper()\n5-char type header +\n(ID + 1) 'zip'/'zap' + '|'"]
+    C --> D[".zipzip File\n(67 zips per line)"]
+    D --> E["un_zipzip()\nRead header &\n(len(block) // 3) - 1"]
+    E --> F["Recovered File\n(100% identical)"]
 ```
 
-1. **Lectura Binaria (`bytes`):** Se lee cualquier archivo en modo binario (`"rb"`), obteniendo valores enteros entre `0` y `255` por cada byte.
-2. **Codificación (`zipper`):**
-   - Cada byte con valor `N` se convierte en `N` repeticiones aleatorias de `"zip"` (80% de probabilidad) o `"zap"` (20% de probabilidad), cerrando siempre con un `"zip|"`.
-   - Cada **67 bloques** se inserta automáticamente un salto de línea (`\n`) para mantener el archivo `.zipzip` visualmente alineado.
-   - Incluye una barra de progreso en consola con 8 _checkpoints_ (`12.5%` → `100%`).
-3. **Decodificación (`un_zipzip`):**
-   - Como tanto `"zip"` como `"zap"` miden exactamente **3 caracteres**, el azar no afecta la reconstrucción.
-   - Se eliminan los saltos de línea, se divide por `"|"` y se recupera el byte original mediante la fórmula:
-     $$\text{byte} = \frac{\text{len(bloque)}}{3} - 1$$
+1. **Key & Byte Mapping (`zip_ids`):** Generates a random 6-character hex key (or uses a provided one) to seed a deterministic shuffle of all 256 possible byte values (`0`–`255`).
+2. **File-Type Header (`zip_file_type`):** Prepends a unique 5-letter identifier (made of `z`, `i`, `p`, `a`) followed by `|` so the decoder can restore the file extension automatically.
+3. **Encoding (`zipper`):**
+   - Each mapped ID `N` becomes `N` random repetitions of `"zip"` (80% probability) or `"zap"` (20% probability), always ending with `"zip|"`.
+   - Every **67 blocks**, a newline (`\n`) is inserted to keep the `.zipzip` file neatly formatted.
+   - Prints a live progress bar across 8 checkpoints (`12.5%` → `100%`).
+4. **Decoding (`un_zipzip`):**
+   - Strips line breaks and reads the leading 5-character header to determine the file extension.
+   - Because both `"zip"` and `"zap"` are exactly **3 characters** long, the randomness does not affect recovery.
+   - Recovers each ID using:
+     $$\text{ID} = \frac{\text{len(block)}}{3} - 1$$
+   - Reverses the key-shuffled mapping to restore the exact original bytes.
 
-### Ejemplo visual de codificación
+### Visual Encoding Example
 
-| Byte Original | Valor Decimal | Representación en `.zipzip`               | Largo del bloque |
-| :-----------: | :-----------: | :---------------------------------------- | :--------------: |
-|    `\x00`     |      `0`      | `zip\|`                                   |       `3`        |
-|    `\x01`     |      `1`      | `zipzip\|` _(o `zapzip\|`)_               |       `6`        |
-|    `\x03`     |      `3`      | `zipzapzipzip\|`                          |       `12`       |
-|     `'A'`     |     `65`      | `zipzipzap...zip\|` _(66 veces en total)_ |      `198`       |
+| Mapped ID | Representation in `.zipzip`              | Block Length |
+| :-------: | :--------------------------------------- | :----------: |
+|    `0`    | `zip\|`                                  |     `3`      |
+|    `1`    | `zipzip\|` _(or `zapzip\|`)_             |     `6`      |
+|    `3`    | `zipzapzipzip\|`                         |     `12`     |
+|   `65`    | `zipzipzap...zip\|` _(66 tokens total)_  |    `198`     |
+
+### Supported File-Type Headers
+
+`.txt`, `.pdf`, `.docx`, `.xlsx`, `.pptx`, `.jpg`, `.png`, `.mp3`, `.mp4`, `.zip`, `.html`, `.css`, `.js`, `.py`, `.json` _(unlisted extensions default to `.txt`)_.
 
 ---
 
-## Estructura del Proyecto
+## Installation
 
-```text
-zipzip/
-├── encoder.py          # Clase zip_zip: convierte bytes a formato .zipzip
-├── decoder.py          # Clase unzip_zip: reconstruye los bytes originales
-├── test.py             # Script de prueba completa (PDF -> .zipzip -> PDF)
-├── sample/             # Archivos de prueba y salidas generadas
-│   ├── pdf.pdf         # PDF original de muestra
-│   ├── pdf.zipzip      # Archivo codificado en formato zipzip
-│   ├── pdf_unziped.pdf # PDF reconstruido y funcional
-│   └── the-veredict.txt
-└── README.md
+Requires **Python 3.8+**. Clone the repository and install the package (using a virtual environment is recommended):
+
+```bash
+git clone <your-repo-url>
+cd zip_zip
+python -m venv venv
+source venv/bin/activate   # On Windows: venv\Scripts\activate
+pip install -e .
 ```
 
 ---
 
-## Uso Rápido
+## Quick Start (Interactive CLI)
 
-### 1. Ejecutar la prueba incluida
+Launch the interactive CLI from anywhere in your active environment:
 
-```powershell
-python test.py
+```bash
+zipzip
 ```
 
-Verás la barra de progreso en tiempo real:
+### Available Commands
+
+| Command       | Description                                                                 |
+| :------------ | :-------------------------------------------------------------------------- |
+| `ls`          | Lists files in the current directory with selection numbers (`1_file`, ...) |
+| `cd <folder>` | Changes the current working directory                                       |
+| `zap <num>`   | Selects a file by its number from `ls`                                      |
+| `chezip`      | Displays the currently selected file                                        |
+| `cleanzip`    | Clears the current file selection                                           |
+| `zip`         | Encodes the selected file to `.zipzip` and prints the decryption key        |
+| `zip -l`      | Encodes the selected file and generates a `.aiff` audio preview             |
+| `unzip`       | Prompts for the decryption key and restores the selected `.zipzip` file     |
+| `help` / `?`  | Lists all available commands                                                |
+| `exitzip`     | Exits the CLI                                                               |
+
+> [!WARNING]
+> `zip` deletes the original file after writing the `.zipzip` output, and `unzip` deletes the `.zipzip` file after restoring the original. Make sure to **save your decryption key**!
+
+### Example Session
 
 ```text
+>>> cd sample
+Current Folder: .../zip_zip/sample
+>>> ls
+1_pdf.pdf
+2_the-veredict.txt
+3_verity.jpg
+>>> zap 2
+File .../zip_zip/sample/the-veredict.txt selected
+>>> zip -l
 12.5% ====
 25.0% ========
 37.5% ============
@@ -92,10 +135,45 @@ Verás la barra de progreso en tiempo real:
 87.5% ============================
 100.0% ================================
 ZIP ZIP COMPLETE :D
+File successfully compressed to: .../zip_zip/sample/the-veredict.zipzip
+🔑 Decryption key (save this to unzip!): A3F91C
+Total zip: ...
+Total zap: ...
+Total characters: ...
 ```
 
-<div align="center">
-  <sub>Hecho con mucho <code>zip</code> y un poco de <code>zap</code> </sub>
-</div>
+To restore the file later:
 
-- pdf.zipzip = encriptation key // 01E991
+```text
+>>> ls
+>>> zap <number_of_zipzip_file>
+>>> unzip
+Enter the decryption key >>> A3F91C
+File successfully recovered to: .../zip_zip/sample/the-veredict.txt
+```
+
+---
+
+## Project Structure
+
+```text
+zip_zip/
+├── pyproject.toml              # Package metadata, dependencies & `zipzip` CLI script
+├── README.md
+├── sample/                     # Sample files for testing
+│   ├── pdf.pdf
+│   ├── the-veredict.txt
+│   └── verity.jpg
+└── zipzip_storage/
+    ├── __init__.py
+    ├── main.py                 # Interactive `cmd.Cmd` CLI (`zipzip`)
+    ├── encoder.py              # `zip_zip` class: key shuffling, header & encoding
+    ├── decoder.py              # `unzip_zip` class: header detection & decoding
+    └── zip_listen.py           # `zip_listen` class: TTS audio preview (`.aiff`)
+```
+
+---
+
+<div align="center">
+  <sub>Made with lots of <code>zip</code> and a little bit of <code>zap</code></sub>
+</div>
