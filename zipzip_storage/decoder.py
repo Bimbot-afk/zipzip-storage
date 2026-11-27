@@ -13,8 +13,7 @@ class unzip_zip:
 
     def un_zipzip(self, zipped_text) -> bytes:
         if isinstance(zipped_text, bytes):
-            zipped_text = zipped_text.decode("utf-8")
-
+            zipped_text = zipped_text.decode("utf-8")       
 
         file_type_zip = zipped_text.split("|")[0]
 
@@ -24,14 +23,16 @@ class unzip_zip:
 
         if len(file_type_zip) == 5:
             file_type_ext = self.wich_file_type(blocks.pop(0))
-            
+                
         ids = [(len(block) // 3) - 1 for block in blocks]
 
         if self.zip_to_file is not None:
-            return bytes(self.zip_to_file[i] for i in ids), file_type_ext
+            recovered = bytes(self.zip_to_file[i] for i in ids)
+            if not recovered.startswith(b"zipzapzip"):
+                raise ValueError("Invalid zip key")
+            return recovered[9:], file_type_ext
 
         return bytes(ids), file_type_ext
-
 
     def wich_file_type(self, file_type):
         zip_file_type_d = {

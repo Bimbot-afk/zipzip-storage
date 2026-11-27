@@ -141,7 +141,7 @@ def zip_file(path, arg):
     print(f"Total zap: {total_zap}")
     print(f"Total characters: {len(zipped_file)}")
 
-    if arg.strip() == "-r":
+    if arg.strip() != "-r":
         try:
             os.remove(path_zip)
         except FileNotFoundError:
@@ -156,8 +156,12 @@ def un_zip(path, key, arg):
         zipped_content = unzip.read()
 
     dec = uz(key)
-    recover_bytes, ext = dec.un_zipzip(zipped_content)
-
+    try:
+        recover_bytes, ext = dec.un_zipzip(zipped_content)
+    except ValueError as e:
+        print(e)
+        return
+    
     recovered_path = zipped_path.with_suffix(ext)
 
     with open(recovered_path, "wb") as file:
@@ -165,7 +169,7 @@ def un_zip(path, key, arg):
 
     print(f"File successfully recovered to: {recovered_path}")
 
-    if arg.strip() == "-r":
+    if arg.strip() != "-r":
         try:
             os.remove(zipped_path)
         except FileNotFoundError:

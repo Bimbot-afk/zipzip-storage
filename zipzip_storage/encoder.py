@@ -8,12 +8,14 @@ class zip_zip:
         unique_bytes = list(range(256))
         random.Random(self.key).shuffle(unique_bytes)
         self.file_to_zip = {byte_val: idx for idx, byte_val in enumerate(unique_bytes)}
+        self.firmkey = "zipzapzip"
         self.total_zip = 0
         self.total_zap = 0
         
 
     def zip_ids(self, data:bytes):
-        return [self.file_to_zip[b] for b in data]
+        data_w_firm = self.firmkey.encode("utf-8") + data
+        return [self.file_to_zip[b] for b in data_w_firm]
 
     def zip_file_type(self, file_type):
         #only combinations of z-i-p-a max 5 letters
@@ -42,9 +44,9 @@ class zip_zip:
 
     def zipper(self, ids, file_type: str):
         zip_file_type = self.zip_file_type(file_type)
-        file_zipped = [f"{zip_file_type}|"] 
+        file_zipped = [f"{zip_file_type}|"]
         total_zip_bar = "" 
-        progress = 0    
+        progress = 0
         zip_bar = "===="
         total_zip = len(ids)
         line_zips = 0
