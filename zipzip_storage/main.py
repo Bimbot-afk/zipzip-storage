@@ -52,8 +52,17 @@ class zipzip(cmd.Cmd):
     def do_zap(self, arg):
         """Selects a file to zip or unzip"""
         files = self.current_files
-        file_number = arg.strip()
-        self.selected_file = files[file_number]
+        if not files:
+            print(f"{colors('RED')}'check with 'ls' first ;){colors('RESET')}")
+            return
+        total_files = len(files)
+        file_index = int(arg.strip()) - 1
+
+        if file_index < 0 or file_index >= total_files:
+            print(f"{colors('RED')}'{arg}' is not a valid file number{colors('RESET')}")
+            return 
+        
+        self.selected_file = files[str(file_index)]
         print(f"{colors('CYAN')}File {self.selected_file} selected{colors('RESET')}")
 
     def do_chezip(self, arg):
@@ -78,12 +87,14 @@ class zipzip(cmd.Cmd):
 
 
     def do_exitzip(self, arg):
-        """Exits zipzap"""
+        """Exits zipzip"""
         print(f"{colors('CYAN')}zipzap :c{colors('RESET')}")
         exit()
 
 def zip_file(path, arg):
     path_zip = Path(path)
+    args_list = arg.split()
+
     with open(path_zip, "rb") as file:
         data = file.read()
 
@@ -97,7 +108,7 @@ def zip_file(path, arg):
 
     new_zip_path = path_zip.with_suffix(".zipzip")
 
-    if arg.strip() == "-l":
+    if  "-l" in args_list:
         zl(zipped_file, file_name)
 
     with open(new_zip_path, "wb") as file:
@@ -114,14 +125,16 @@ def zip_file(path, arg):
     print(f"{colors('CYAN')}Total zap: {total_zap}{colors('RESET')}")
     print(f"{colors('CYAN')}Total characters: {len(zipped_file)}{colors('RESET')}")
 
-    if arg.strip() != "-r":
+    if "-r" not in args_list:
         try:
             os.remove(path_zip)
         except FileNotFoundError:
-            print("File already deleted ")
+            print(f"{colors('RED')}'{zipped_path}' already deleted{colors('RESET')}")
 
 
 def un_zip(path, key, arg):
+
+    arg_list = arg.split()
 
     zipped_path = Path(path)
 
@@ -142,11 +155,11 @@ def un_zip(path, key, arg):
 
     print(f"{colors('CYAN')}File successfully recovered to: {recovered_path}{colors('RESET')}")
 
-    if arg.strip() != "-r":
+    if "-r" not in arg_list:
         try:
             os.remove(zipped_path)
         except FileNotFoundError:
-            print("File already deleted")
+            print(f"{colors('RED')}'{zipped_path}' already deleted{colors('RESET')}")
 
 def main():
     zipzip().cmdloop()

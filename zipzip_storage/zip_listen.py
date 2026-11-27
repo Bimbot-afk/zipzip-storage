@@ -16,7 +16,5 @@ class zip_listen():
 
         text_say =  " ".join(sample).replace("zip", "zip ").replace("zap", "zap ").strip()
 
-        print(text_say)
-
         self.engine.save_to_file(text_say, zip_listen_path)
         self.engine.runAndWait()
