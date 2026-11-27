@@ -60,7 +60,7 @@ class zipzip(cmd.Cmd):
             unzip_file_path = self.selected_file
             key = input("Enter the decryption key >>> ").strip()
             print_zipzipzip()
-            un_zip(unzip_file_path, key)
+            un_zip(unzip_file_path, key, arg)
         else:
             print("Make sure to select a zipzip file")
         self.selected_file = None
@@ -141,13 +141,14 @@ def zip_file(path, arg):
     print(f"Total zap: {total_zap}")
     print(f"Total characters: {len(zipped_file)}")
 
-    try:
-        os.remove(path_zip)
-    except FileNotFoundError:
-        print("File already deleted")
+    if arg.strip() == "-r":
+        try:
+            os.remove(path_zip)
+        except FileNotFoundError:
+            print("File already deleted ")
 
 
-def un_zip(path, key):
+def un_zip(path, key, arg):
 
     zipped_path = Path(path)
 
@@ -164,10 +165,11 @@ def un_zip(path, key):
 
     print(f"File successfully recovered to: {recovered_path}")
 
-    try:
-        os.remove(zipped_path)
-    except FileNotFoundError:
-        print("File already deleted")
+    if arg.strip() == "-r":
+        try:
+            os.remove(zipped_path)
+        except FileNotFoundError:
+            print("File already deleted")
 
 def main():
     zipzip().cmdloop()
