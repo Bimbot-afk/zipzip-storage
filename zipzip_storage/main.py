@@ -5,64 +5,37 @@ from pathlib import Path
 from .decoder import unzip_zip as uz
 from .encoder import zip_zip as zz
 from .zip_listen import zip_listen as zl
-
-def print_zipzipzip():
-    print("""
-
-               .dMMMMMMMMMMMMMMMMMMMMMMb.
-            .dMMMMMMMMMMMMMMMMMMMMMMMMMMMMb.
-          .MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM.
-         dMMMMMMMP'        ``YMMMMMMM       `YMMb
-        dMMMMMMM'             `MMMMMM'         `MMb
-       dMMMMMMM'               `MMMM'           `MMb
-       MMMMMMMM                 MMMM             MMM
-       MMMMMMMM                 MMMM             MMM
-       MMMMMMMMb               dMMMM            dMM'
-       YMMMMMMMMb             dMMMMMb          dMM'
-        YMMMMMMMMMb.       .dMMMMMMMMMb.      dMMP
-         `YMMMMMMMMMMMbbMMMMMMMMMMMMMMMMMbb.dMMP'
-           `YMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMP'
-             `YMMMMMMMMMMMMMMMMMMMMMMMMMMMMP'
-                `TMMMMMMMMMMMMMMMMMMMMMMMP'
-                   `TMMMMMMMMMMMMMMMMP'
-                        |MMMMMMM|
-                        |MMMMMMM|
-                        |MMMMMMM|
-                       dMMMMMMMMMb
-                     .MMMMMMMMMMMMM.
-                   .MMMMMMMMMMMMMMMMM.
-    """)
-    print(f"Current Folder: {Path.cwd()}")
+from .cutezip import print_zipzipzip, colors
 
 class zipzip(cmd.Cmd):
-    prompt = ">>> "
-    intro = "Welcome to zip zip. Type help or ? to list commands."
+    prompt = f"{colors('GREEN')}>>> {colors('RESET')}"
+    intro = f"{colors('GREEN')}Welcome to zip zip. Type help or ? to list commands.{colors('RESET')}"
     current_files = {}
     selected_file = None
-    print_zipzipzip()
+    print_zipzipzip(str(Path.cwd()))
 
     def do_zip(self, arg):
         """zZips the selected file"""
-        print("You will zip zip a file")
+        print(colors("CYAN") + "You will zip zip a file" + colors("RESET"))
         zip_file_path = self.selected_file
         if self.selected_file == None:
-            print("Make sure to select a file")
+            print(colors("RED") + "Make sure to select a file" + colors("RESET"))
         else:
-            print_zipzipzip()
+            print_zipzipzip(str(Path.cwd()))
             zip_file(zip_file_path, arg)
         self.selected_file = None
 
 
     def do_unzip(self, arg):
         """Unzips the selected file"""
-        print("You will unzip a zipzip file")
+        print(colors("CYAN") + "You will unzip a zipzip file" + colors("RESET"))
         if self.selected_file is not None and self.selected_file.suffix == ".zipzip":
             unzip_file_path = self.selected_file
             key = input("Enter the decryption key >>> ").strip()
-            print_zipzipzip()
+            print_zipzipzip(str(Path.cwd()))
             un_zip(unzip_file_path, key, arg)
         else:
-            print("Make sure to select a zipzip file")
+            print(colors("RED") + "Make sure to select a zipzip file" + colors("RESET"))
         self.selected_file = None
 
     def do_ls(self, arg):
@@ -72,7 +45,7 @@ class zipzip(cmd.Cmd):
         for item in os.listdir("."):
             i+=1
             files[str(i)] = Path(item).absolute()
-            print(f"{i}_{item}")
+            print(f"{colors('YELLOW')}# {i} {colors('RESET')}{item}")
         
         self.current_files = files
 
@@ -81,32 +54,32 @@ class zipzip(cmd.Cmd):
         files = self.current_files
         file_number = arg.strip()
         self.selected_file = files[file_number]
-        print(f"File {self.selected_file} selected")
+        print(f"{colors('CYAN')}File {self.selected_file} selected{colors('RESET')}")
 
     def do_chezip(self, arg):
         """Shows whats the current selected file"""
         if self.selected_file == None:
-            print("No file selected")
+            print(colors("RED") + "No file selected" + colors("RESET"))
         else:
-            print(f"Selected file: {self.selected_file}")
+            print(f"{colors('CYAN')}File {self.selected_file} selected{colors('RESET')}")
 
     def do_cleanzip(self, arg):
         """Clean the current selected file"""
         self.selected_file = None
-        print("File selection cleared")
+        print(f"{colors('CYAN')}File selection cleared{colors('RESET')}")
 
     def do_cd(self, folder):
         """Change directory"""
         try: 
             os.chdir(folder)
-            print(f"Current Folder: {Path.cwd()}")
+            print(f"{colors('CYAN')}Current Folder: {Path.cwd()}{colors('RESET')}")
         except FileNotFoundError:
-            print("Folder not found")
+            print(f"{colors('RED')}Folder not found{colors('RESET')}")
 
 
     def do_exitzip(self, arg):
         """Exits zipzap"""
-        print("zipzap :c")
+        print(f"{colors('CYAN')}zipzap :c{colors('RESET')}")
         exit()
 
 def zip_file(path, arg):
@@ -135,11 +108,11 @@ def zip_file(path, arg):
 
     total_zip, total_zap = encoder_instance.total_zipzap()
 
-    print(f"File successfully compressed to: {new_zip_path}")
-    print(f"🔑 Decryption key (save this to unzip!): {encoder_instance.key}")
-    print(f"Total zip: {total_zip}")
-    print(f"Total zap: {total_zap}")
-    print(f"Total characters: {len(zipped_file)}")
+    print(f"{colors('CYAN')}File successfully compressed to: {new_zip_path}{colors('RESET')}")
+    print(f"{colors('CYAN')}🔑 Decryption key (save this to unzip!): {encoder_instance.key}{colors('RESET')}")
+    print(f"{colors('CYAN')}Total zip: {total_zip}{colors('RESET')}")
+    print(f"{colors('CYAN')}Total zap: {total_zap}{colors('RESET')}")
+    print(f"{colors('CYAN')}Total characters: {len(zipped_file)}{colors('RESET')}")
 
     if arg.strip() != "-r":
         try:
@@ -159,7 +132,7 @@ def un_zip(path, key, arg):
     try:
         recover_bytes, ext = dec.un_zipzip(zipped_content)
     except ValueError as e:
-        print(e)
+        print(f"{colors('RED')}{e}{colors('RESET')}")
         return
     
     recovered_path = zipped_path.with_suffix(ext)
@@ -167,7 +140,7 @@ def un_zip(path, key, arg):
     with open(recovered_path, "wb") as file:
         file.write(recover_bytes)
 
-    print(f"File successfully recovered to: {recovered_path}")
+    print(f"{colors('CYAN')}File successfully recovered to: {recovered_path}{colors('RESET')}")
 
     if arg.strip() != "-r":
         try:
